@@ -45,6 +45,10 @@ Commands can be passed to the server by passing "command":
 
 	sudo service minecraft_server command "<command>"
 
+The script supports updating the server binary, but at this time it relies on an 
+outdated URL to fetch minecraft_server.jar. DO NOT attempt to update the 
+Minecraft server with this script at this time until this issue is patched.
+
 ## Multiple Instances
 
 The script can be copied multiple times and used to host multiple servers
