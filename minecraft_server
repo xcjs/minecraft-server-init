@@ -1,27 +1,27 @@
 #!/bin/bash
-# /etc/init.d/minecraft
-# version 0.3.4 2011-06-12 (YYYY-MM-DD)
+# /etc/init.d/mc_survival
+# version 0.3.4 2015-08-15 (YYYY-MM-DD)
 
 ### BEGIN INIT INFO
-# Provides:   minecraft
+# Provides:   Minecraft Server
 # Required-Start: $local_fs $remote_fs
 # Required-Stop:  $local_fs $remote_fs
 # Should-Start:   $network
 # Should-Stop:    $network
 # Default-Start:  2 3 4 5
 # Default-Stop:   0 1 6
-# Short-Description:    Minecraft server
-# Description:    Starts the minecraft server
+# Short-Description:    Minecraft Server
+# Description:    Starts a minecraft server
 ### END INIT INFO
 
 #Settings
 SERVICE='minecraft_server.jar'
 OPTIONS='nogui'
 USERNAME='minecraft'
-WORLD='Snow2'
-MCPATH='/home/minecraft/data'
+MCPATH='/home/minecraft/server'
+SERVERNAME='servername'
 CPU_COUNT=1
-INVOCATION="java -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPU_COUNT -XX:+AggressiveOpts -jar $SERVICE $OPTIONS"
+INVOCATION="java -Xmx1536M -Xms1536M -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=$CPU_COUNT -XX:+AggressiveOpts -jar $SERVICE $OPTIONS"
 
 ME=`whoami`
 as_user() {
@@ -33,15 +33,15 @@ as_user() {
 }
 
 mc_start() {
-  if ps ax | grep -v grep | grep -v -i SCREEN | grep $SERVICE > /dev/null
+  if as_user "screen -ls | grep $SERVERNAME > /dev/null"
   then
     echo "$SERVICE is already running!"
   else
     echo "Starting $SERVICE..."
     cd $MCPATH
-    as_user "cd $MCPATH && screen -dmS minecraft $INVOCATION"
+    as_user "cd $MCPATH && screen -dmS $SERVERNAME $INVOCATION"
     sleep 7
-    if ps ax | grep -v grep | grep -v -i SCREEN | grep $SERVICE > /dev/null
+    if as_user "screen -ls | grep $SERVERNAME > /dev/null"
     then
       echo "$SERVICE is now running."
     else
@@ -51,18 +51,18 @@ mc_start() {
 }
 
 mc_stop() {
-  if ps ax | grep -v grep | grep -v -i SCREEN | grep $SERVICE > /dev/null
+  if as_user "screen -ls | grep $SERVERNAME > /dev/null"
   then
     echo "Stopping $SERVICE"
-    as_user "screen -p 0 -S minecraft -X eval 'stuff \"say SERVER SHUTTING DOWN IN 10 SECONDS. Saving map...\"\015'"
-    as_user "screen -p 0 -S minecraft -X eval 'stuff \"save-all\"\015'"
+    as_user "screen -p 0 -S $SERVERNAME -X eval 'stuff \"say SERVER SHUTTING DOWN IN 10 SECONDS. Saving map...\"\015'"
+    as_user "screen -p 0 -S $SERVERNAME -X eval 'stuff \"save-all\"\015'"
     sleep 10
-    as_user "screen -p 0 -S minecraft -X eval 'stuff \"stop\"\015'"
+    as_user "screen -p 0 -S $SERVERNAME -X eval 'stuff \"stop\"\015'"
     sleep 7
   else
     echo "$SERVICE was not running."
   fi
-  if ps ax | grep -v grep | grep -v -i SCREEN | grep $SERVICE > /dev/null
+  if as_user "screen -ls | grep $SERVERNAME > /dev/null"
   then
     echo "Error! $SERVICE could not be stopped."
   else
@@ -71,7 +71,7 @@ mc_stop() {
 }
 
 mc_update() {
-  if ps ax | grep -v grep | grep -v -i SCREEN | grep $SERVICE > /dev/null
+  if as_user "screen -ls | grep $SERVERNAME > /dev/null"
   then
     echo "$SERVICE is running! Will not start update."
   else
@@ -96,10 +96,10 @@ mc_command() {
   if [ "$1" ]
   then
     command="$1";
-    if ps ax | grep -v grep | grep -v -i SCREEN | grep $SERVICE > /dev/null
+    if as_user "screen -ls | grep $SERVERNAME > /dev/null"
     then
       echo "$SERVICE is running... executing command"
-      as_user "screen -p 0 -S minecraft -X eval 'stuff \"$command\"\015'"
+      as_user "screen -p 0 -S $SERVERNAME -X eval 'stuff \"$command\"\015'"
     fi
     else
       echo "Must specify server command"
@@ -124,7 +124,7 @@ case "$1" in
     mc_start
     ;;
   status)
-    if ps ax | grep -v grep | grep -v -i SCREEN | grep $SERVICE > /dev/null
+    if as_user "screen -ls | grep $SERVERNAME > /dev/null"
     then
       echo "$SERVICE is running."
     else
@@ -136,7 +136,7 @@ case "$1" in
     ;;
 
   *)
-  echo "Usage: /etc/init.d/minecraft {start|stop|update|status|restart|command \"server command\"}"
+  echo "Usage: /etc/init.d/mc_survival {start|stop|update|status|restart|command \"server command\"}"
   exit 1
   ;;
 esac
