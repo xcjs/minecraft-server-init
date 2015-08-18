@@ -21,7 +21,7 @@ runlevel:
 
 Because the service relies on a screen daemon, Ubuntu may have an issue with
 screen and the priority of the service. By changing the priority of the startup
-script, I was able to get it to work with screen while avoidng the error message
+script, I was able to get it to work with screen while avoiding the error message
 "Cannot make directory '/var/run/screen': Permission denied" which seems linked
 to severel Ubuntu bugs.
 
