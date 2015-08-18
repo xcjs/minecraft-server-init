@@ -6,6 +6,27 @@ the server to start under a service account along with the physical server.
 
 ## Installation
 
+The script requires a service account: 
+
+	sudo adduser minecraft
+
+Then copy the minecraft_server script to /etc/init.d/
+
+	sudo cp ./minecraft_server /etc/init.d/
+
+Under some Linux systems, the service needs registered under the default
+runlevel:
+
+	sudo update-rc.d minecraft_server defaults
+
+Because the service relies on a screen daemon, Ubuntu may have an issue with
+screen and the priority of the service. By changing the priority of the startup
+script, I was able to get it to work with screen while avoidng the error message
+"Cannot make directory '/var/run/screen': Permission denied" which seems linked
+to severel Ubuntu bugs.
+
+	sudo update-rc.d minecraft_server defaults 99 10
+
 ## Commands
 
 To start a service manually using a system like Upstart (Ubuntu):
