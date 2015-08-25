@@ -118,7 +118,6 @@ case "$1" in
     ;;
   restart)
     mc_stop
-    mc_update
     mc_start
     ;;
   update)
