@@ -4,6 +4,19 @@ This init script provides a service wrapper around minecraft_server.jar. It
 allows the init system to make start/stop/restarts/status calls while allowing 
 the server to start under a service account along with the physical server.
 
+## Dependencies
+
+This service depends on:
+
+* Node.js
+* NPM
+* The Node.js port of jsawk
+
+For Ubuntu, these dependencies can be installed with:
+
+	sudo apt-get install nodejs nodejs-legacy npm
+	sudo npm install -g jsawk
+
 ## Installation
 
 The script requires a service account: 
@@ -45,9 +58,11 @@ Commands can be passed to the server by passing "command":
 
 	sudo service minecraft_server command "<command>"
 
-The script supports updating the server binary, but at this time it relies on an 
-outdated URL to fetch minecraft_server.jar. DO NOT attempt to update the 
-Minecraft server with this script at this time until this issue is patched.
+The server can now be updated, as well:
+
+	sudo service minecraft_server update
+
+Using the restart command will also update the server binary.
 
 ## Multiple Instances
 
