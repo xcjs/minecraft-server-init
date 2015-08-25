@@ -62,7 +62,7 @@ The server can now be updated, as well:
 
 	sudo service minecraft_server update
 
-Using the restart command will also update the server binary.
+The server will stop if it is running and restart.
 
 ## Multiple Instances
 
