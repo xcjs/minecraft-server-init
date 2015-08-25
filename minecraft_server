@@ -75,11 +75,12 @@ mc_update() {
   then
     echo "$SERVICE is running! Will not start update."
   else
-    MC_SERVER_URL=http://www.minecraft.net/download/minecraft_server.jar?v=`date | sed "s/[^a-zA-Z0-9]/_/g"`
+    VER=`curl -s https://s3.amazonaws.com/Minecraft.Download/versions/versions.json | jsawk -n 'console.log(this.latest.release)'`
+    MC_SERVER_URL="https://s3.amazonaws.com/Minecraft.Download/versions/$VER/minecraft_server.$VER.jar"
     as_user "cd $MCPATH && wget -q -O $MCPATH/minecraft_server.jar.update $MC_SERVER_URL"
     if [ -f $MCPATH/minecraft_server.jar.update ]
     then
-      if `diff $MCPATH/$SERVICE $MCPATH/minecraft_server.jar.update >/dev/null`
+      if `diff $MCPATH/$SERVICE $MCPATH/minecraft_server.jar.update > /dev/null`
       then 
         echo "You are already running the latest version of $SERVICE."
       else
