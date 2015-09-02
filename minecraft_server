@@ -1,5 +1,5 @@
 #!/bin/bash
-# /etc/init.d/mc_survival
+# /etc/init.d/minecraft_server
 # version 0.3.4 2015-08-15 (YYYY-MM-DD)
 
 ### BEGIN INIT INFO
