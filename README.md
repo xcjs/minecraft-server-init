@@ -8,13 +8,14 @@ the server to start under a service account along with the physical server.
 
 This service depends on:
 
+* screen
 * Node.js
 * NPM
 * The Node.js port of jsawk
 
 For Ubuntu, these dependencies can be installed with:
 
-	sudo apt-get install nodejs nodejs-legacy npm
+	sudo apt-get install screen nodejs nodejs-legacy npm
 	sudo npm install -g jsawk
 
 ## Installation
@@ -62,7 +63,7 @@ The server can now be updated, as well:
 
 	sudo service minecraft_server update
 
-Using the restart command will also update the server binary.
+The server will stop if it is running and restart.
 
 ## Multiple Instances
 
